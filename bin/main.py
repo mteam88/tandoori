@@ -4,9 +4,6 @@ from io import BytesIO
 import py_compile
 import click
 
-FILE_IN = 'tik.tand'
-FILE_OUT = FILE_IN.split('.')[0] + ".py"
-
 def stmt_incr(toks, tok):
     i = toks.index(tok)
     var = toks[i+1]
@@ -16,9 +13,16 @@ def stmt_incr(toks, tok):
     return ret
 
 @click.command()
-@click.argument('FILE_IN')
-def marinate(FILE_IN):
-    with open(FILE_IN, 'r') as f:
+@click.argument('file_in')
+@click.pass_context
+def tandoori(ctx, file_in):
+    ctx.forward(marinate)
+    exec(open(file_in.split('.')[0] + ".py").read())
+
+@click.command()
+@click.argument('file_in')
+def marinate(file_in):
+    with open(file_in, 'r') as f:
         tokens = list(tokenize.generate_tokens(f.readline))
         out = []
         donelines = []
@@ -33,7 +37,5 @@ def marinate(FILE_IN):
                 pass
             else:
                 out.append((toktype, tokval))
-    with open(FILE_OUT, 'w') as f:
+    with open(file_in.split('.')[0] + ".py", 'w') as f:
         f.write(tokenize.untokenize(out).decode('utf-8'))
-
-    exec(open(FILE_OUT).read())

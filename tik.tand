@@ -1,3 +1,0 @@
-me = 5
-incr me 2
-print(me)
