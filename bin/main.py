@@ -21,14 +21,18 @@ def marinate(file_in):
         donelines = []
         for token in tokens:
             toktype, tokval, _, _, tokline = token
-            if tokval == "incr":
+            if not tokline in donelines:
                 for handler in tand.HANDLERS:
-                    newdonelines, newtokens = handler.handle(tokens, token)
-                    for newtoktype, newtokval, _, _, _ in newtokens:
-                        out.append((newtoktype, newtokval))
+                    handled, (newdonelines, newtokens) = handler.handle(tokens, token)
                     if newdonelines:
                         donelines.append(newdonelines)
-            elif tokline in donelines:
+                    if handled:
+                        for newtoktype, newtokval, _, _, _ in newtokens:
+                            out.append((newtoktype, newtokval))
+                        break
+            else:
+                handled = True
+            if handled:
                 pass
             else:
                 out.append((toktype, tokval))
