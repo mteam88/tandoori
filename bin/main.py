@@ -1,7 +1,4 @@
 import tokenize
-import copy
-from io import BytesIO
-import py_compile
 import click
 import tandoori as tand
 
