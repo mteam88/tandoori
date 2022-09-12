@@ -2,12 +2,12 @@ import tokenize
 from io import BytesIO
 
 class Handler:
-    def handle(toks, tok):
+    def handle(self, toks, tok):
         pass
 
 class IncrHandler(Handler):
     def handle(self, toks, tok):
-        if tok.string == 'incr':
+        if tok.string == 'incr' and toks[toks.index(tok)+1].string == ">":
             i = toks.index(tok)
             var = toks[i+1]
             increment = toks[i+2]
