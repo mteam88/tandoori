@@ -18,8 +18,8 @@ class IncrHandler(Handler):
 
 class IImportHandler(Handler):
     def handle(self, toks, tok):
-        if tok.string == 'i':
-            outstr = f"import"
+        if tok.string == 'im' and toks[toks.index(tok)+1].string == ">":
+            outstr = "import"
             ret = list(tokenize.tokenize(BytesIO(outstr.encode('utf-8')).readline))
             return True, (False, ret)
         return False, (None, None)
